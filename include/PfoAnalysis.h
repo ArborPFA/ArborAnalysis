@@ -116,7 +116,7 @@ private:
     ParticleVector      m_quarkPfoVector;                       ///< 
     MCParticleVector    m_pfoTargetVector;                      ///< 
 
-    int                 m_nPfosTotal;                           ///< 
+    int                 m_nPfosTotal;                           ///<
     int                 m_nPfosNeutralHadrons;                  ///< 
     int                 m_nPfosPhotons;                         ///< 
     int                 m_nPfosTracks;                          ///<
@@ -125,7 +125,8 @@ private:
     float               m_pfoEnergyNeutralHadrons;              ///< 
     float               m_pfoEnergyPhotons;                     ///< 
     float               m_pfoEnergyClusterless;                 ///<
-    float               m_pfoChi2TrackTotal;                     ///<
+    float               m_pfoChi2TrackTotal;                    ///<
+    float               m_pfoClusterEnergySum;
 
     float               m_pfoEnergyTracks;                      ///< 
     float               m_pfoECalToEmEnergy;                    ///< 
@@ -135,7 +136,7 @@ private:
     float               m_pfoMuonToEnergy;                      ///< 
     float               m_pfoOtherEnergy;                       ///<
 
-    float               m_pfoMassTotal;                         ///< 
+    float               m_pfoMassTotal;                         ///<
 
     float               m_mcEnergyTotal;                        ///< 
     float               m_mcEnergyENu;                          ///< 

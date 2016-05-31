@@ -112,6 +112,7 @@ void PfoAnalysis::init()
     m_tree->Branch("pfoEnergyPhotons", &m_pfoEnergyPhotons, "pfoEnergyPhotons/F");
     m_tree->Branch("pfoEnergyClusterless", &m_pfoEnergyClusterless, "pfoEnergyClusterless/F");
     m_tree->Branch("pfoChi2TrackTotal", &m_pfoChi2TrackTotal, "pfoChi2TrackTotal/F");
+    m_tree->Branch("pfoClusterEnergySum", &m_pfoClusterEnergySum, "pfoClusterEnergySum/F");
     m_tree->Branch("pfoEnergyTracks", &m_pfoEnergyTracks, "pfoEnergyTracks/F");
     m_tree->Branch("pfoECalToEmEnergy", &m_pfoECalToEmEnergy, "pfoECalToEmEnergy/F");
     m_tree->Branch("pfoECalToHadEnergy", &m_pfoECalToHadEnergy, "pfoECalToHadEnergy/F");
@@ -237,6 +238,7 @@ void PfoAnalysis::Clear()
     m_pfoEnergyPhotons = 0.f;
     m_pfoEnergyClusterless = 0.f;
     m_pfoChi2TrackTotal = 0.f;
+    m_pfoClusterEnergySum = 0.f;
 
     m_pfoEnergyTracks = 0.f;
     m_pfoECalToEmEnergy = 0.f;
@@ -560,8 +562,6 @@ void PfoAnalysis::PerformPfoAnalysis()
             }
 
             const EVENT::ClusterVec &clusterVec = pPfo->getClusters();
-            const EVENT::TrackVec &trackVec = pPfo->getTracks();
-
             float clusterEnergySum(0.f);
 
             const float px((*iter)->getMomentum()[0]);
@@ -682,6 +682,11 @@ void PfoAnalysis::PerformPfoAnalysis()
                 }
             }
         }
+
+        const ClusterVec &clusterVec = pPfo->getClusters();
+
+        for (ClusterVec::const_iterator iter = clusterVec.begin(), iterEnd = clusterVec.end(); iter != iterEnd; ++iter)
+            m_pfoClusterEnergySum += (*iter)->getEnergy();
 
         momTot[0] += pPfo->getMomentum()[0];
         momTot[1] += pPfo->getMomentum()[1];
