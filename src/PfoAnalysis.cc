@@ -114,6 +114,8 @@ void PfoAnalysis::init()
     m_tree->Branch("pfoChi2TrackTotal", &m_pfoChi2TrackTotal, "pfoChi2TrackTotal/F");
     m_tree->Branch("pfoClusterEnergySum", &m_pfoClusterEnergySum, "pfoClusterEnergySum/F");
     m_tree->Branch("pfoEnergyTracks", &m_pfoEnergyTracks, "pfoEnergyTracks/F");
+    m_tree->Branch("pfoClusterEnergyTracks", &m_pfoClusterEnergyTracks, "pfoClusterEnergyTracks/F");
+    m_tree->Branch("pfoClusterEnergyNeutral", &m_pfoClusterEnergyNeutral, "pfoClusterEnergyNeutral/F");
     m_tree->Branch("pfoECalToEmEnergy", &m_pfoECalToEmEnergy, "pfoECalToEmEnergy/F");
     m_tree->Branch("pfoECalToHadEnergy", &m_pfoECalToHadEnergy, "pfoECalToHadEnergy/F");
     m_tree->Branch("pfoHCalToEmEnergy", &m_pfoHCalToEmEnergy, "pfoHCalToEmEnergy/F");
@@ -138,6 +140,7 @@ void PfoAnalysis::init()
     m_tree->Branch("sumModulusEnergyChanges", &m_sumModulusEnergyChanges, "sumModulusEnergyChanges/F");
     m_tree->Branch("sumSquaredEnergyChanges", &m_sumSquaredEnergyChanges, "sumSquaredEnergyChanges/F");
     m_tree->Branch("pfoEnergies", &m_pfoEnergies);
+    m_tree->Branch("pfoClusterEnergies", &m_pfoClusterEnergies);
     m_tree->Branch("pfoPx", &m_pfoPx);
     m_tree->Branch("pfoPy", &m_pfoPy);
     m_tree->Branch("pfoPz", &m_pfoPz);
@@ -241,6 +244,8 @@ void PfoAnalysis::Clear()
     m_pfoClusterEnergySum = 0.f;
 
     m_pfoEnergyTracks = 0.f;
+    m_pfoClusterEnergyTracks = 0.f;
+    m_pfoClusterEnergyNeutral = 0.f;
     m_pfoECalToEmEnergy = 0.f;
     m_pfoECalToHadEnergy = 0.f;
     m_pfoHCalToEmEnergy = 0.f;
@@ -548,6 +553,8 @@ void PfoAnalysis::PerformPfoAnalysis()
         const float cosTheta((momentum > std::numeric_limits<float>::epsilon()) ? pPfo->getMomentum()[2] / momentum : -999.f);
         m_pfoCosTheta.push_back(cosTheta);
 
+        float clusterEnergySum(0.f);
+
         if (!pPfo->getTracks().empty())
         {
             // Charged pfos
@@ -562,7 +569,6 @@ void PfoAnalysis::PerformPfoAnalysis()
             }
 
             const EVENT::ClusterVec &clusterVec = pPfo->getClusters();
-            float clusterEnergySum(0.f);
 
             const float px((*iter)->getMomentum()[0]);
             const float py((*iter)->getMomentum()[1]);
@@ -577,6 +583,8 @@ void PfoAnalysis::PerformPfoAnalysis()
 
             m_pfoChiTrack.push_back(chi);
             m_pfoChi2TrackTotal += chi*chi;
+
+            m_pfoClusterEnergyTracks += clusterEnergySum;
         }
         else
         {
@@ -593,7 +601,11 @@ void PfoAnalysis::PerformPfoAnalysis()
                     EVENT::CalorimeterHit *pCalorimeterHit = *hitIter;
                     cellEnergySum += pCalorimeterHit->getEnergy();
                 }
+
+                clusterEnergySum += (*iter)->getEnergy();
             }
+
+            m_pfoClusterEnergyNeutral += clusterEnergySum;
 
             //if (cellEnergySum < std::numeric_limits<float>::epsilon())
             //{
@@ -682,6 +694,8 @@ void PfoAnalysis::PerformPfoAnalysis()
                 }
             }
         }
+
+        m_pfoClusterEnergies.push_back(clusterEnergySum);
 
         const ClusterVec &clusterVec = pPfo->getClusters();
 

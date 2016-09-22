@@ -128,7 +128,9 @@ private:
     float               m_pfoChi2TrackTotal;                    ///<
     float               m_pfoClusterEnergySum;
 
-    float               m_pfoEnergyTracks;                      ///< 
+    float               m_pfoEnergyTracks;                      ///<
+    float               m_pfoClusterEnergyTracks;               ///<
+    float               m_pfoClusterEnergyNeutral;              ///<
     float               m_pfoECalToEmEnergy;                    ///< 
     float               m_pfoECalToHadEnergy;                   ///< 
     float               m_pfoHCalToEmEnergy;                    ///< 
@@ -157,6 +159,7 @@ private:
 
     typedef std::vector<float> FloatVector;
     FloatVector         m_pfoEnergies;                          ///< 
+    FloatVector         m_pfoClusterEnergies;                   ///<
     FloatVector         m_pfoPx;                                ///< 
     FloatVector         m_pfoPy;                                ///< 
     FloatVector         m_pfoPz;                                ///< 
