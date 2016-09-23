@@ -579,7 +579,7 @@ void PfoAnalysis::PerformPfoAnalysis()
             	clusterEnergySum += (*iter)->getEnergy();
 
             const float sigmaE(m_hadronicEnergyResolution * trackEnergySyum / std::sqrt(trackEnergySyum));
-            const float chi( clusterEnergySum - trackEnergySyum / sigmaE );
+            const float chi( (clusterEnergySum - trackEnergySyum) / sigmaE );
 
             m_pfoChiTrack.push_back(chi);
             m_pfoChi2TrackTotal += chi*chi;
